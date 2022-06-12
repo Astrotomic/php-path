@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @covers \Astrotomic\Path\Win32\Path::isAbsolute()
+ */
 test('that win32 isAbsolute provides expected results', function (string $input, bool $expected) {
     expect(\Astrotomic\Path\Win32\Path::isAbsolute($input))->toBeBool()->toBe($expected);
 })->with([
@@ -23,6 +26,9 @@ test('that win32 isAbsolute provides expected results', function (string $input,
     ['directory\\directory', false],
 ]);
 
+/**
+ * @covers \Astrotomic\Path\Posix\Path::isAbsolute()
+ */
 test('that *nix isAbsolute provides expected results', function (string $input, bool $expected) {
     expect(\Astrotomic\Path\Posix\Path::isAbsolute($input))->toBeBool()->toBe($expected);
 })->with([

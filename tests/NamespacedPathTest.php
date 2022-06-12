@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @covers \Astrotomic\Path\Path::toNamespacedPath()
+ */
 test('verify NOOP for toNamespacedPath on any platform', function(string $input, string $expected) {
     expect(\Astrotomic\Path\Path::toNamespacedPath($input))->toBe($expected);
 })->with([
@@ -9,6 +12,9 @@ test('verify NOOP for toNamespacedPath on any platform', function(string $input,
     ['1', '1'],
 ]);
 
+/**
+ * @covers \Astrotomic\Path\Posix\Path::toNamespacedPath()
+ */
 test('verify *nix runs NOOP for toNamespacedPath', function(string $input, string $expected) {
     expect(\Astrotomic\Path\Posix\Path::toNamespacedPath($input))->toBe($expected);
 })->with([

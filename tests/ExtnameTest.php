@@ -45,16 +45,25 @@ dataset('extnameCommonBasics', [
     ['file./', '.'],
     ['file.//', '.'],
 ]);
-// Test the above dataset against both posix and win32 apis...
+
+/**
+ * Test the above dataset against both posix and win32 apis...
+ * @covers \Astrotomic\Path\Win32\Path::extname()
+ */
 test('verify general input against Win32 extname method', function (string $input, string $expected) {
     expect(\Astrotomic\Path\Win32\Path::extname($input))->toBeString()->toBe($expected);
 })->with('extnameCommonBasics');
-// Test the above dataset against both posix and win32 apis...
+/**
+ * Test the above dataset against both posix and win32 apis...
+ * @covers \Astrotomic\Path\Posixs\Path::extname()
+ */
 test('verify general input against *nix extname method', function (string $input, string $expected) {
     expect(\Astrotomic\Path\Posix\Path::extname($input))->toBeString()->toBe($expected);
 })->with('extnameCommonBasics');
 
-
+/**
+ * @covers \Astrotomic\Path\Win32\Path::extname()
+ */
 test('that on Windows, backslash is a path separator', function (string $input, string $expected) {
     expect(\Astrotomic\Path\Win32\Path::extname($input))->toBeString()->toBe($expected);
 })->with([
@@ -68,6 +77,9 @@ test('that on Windows, backslash is a path separator', function (string $input, 
     ['file.\\\\', '.'],
 ]);
 
+/**
+ * @covers \Astrotomic\Path\Posix\Path::extname()
+ */
 test('that on *nix, backslash is a valid name component like any other character', function (string $input, string $expected) {
     expect(\Astrotomic\Path\Posix\Path::extname($input))->toBeString()->toBe($expected);
 })->with([
