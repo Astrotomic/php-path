@@ -4,13 +4,13 @@ namespace Astrotomic\Path;
 
 use Astrotomic\Path\Posix\Path as PosixPath;
 use Astrotomic\Path\Win32\Path as Win32Path;
-use function php_uname;
+use const PHP_OS_FAMILY;
 
 class Path extends AbstractPath
 {
     public static function isWindows(): bool
     {
-        return php_uname('s') === 'Windows';
+        return PHP_OS_FAMILY === 'Windows';
     }
 
     public static function posix(): PosixPath|PathContract
