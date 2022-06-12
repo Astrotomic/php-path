@@ -57,7 +57,7 @@ jobs:
           dependency-versions: "${{ matrix.dependencies }}"
 
       - name: "Execute unit tests"
-        run: "composer exec -- phpunit --verbose"
+        run: "composer exec -- pest --ci"
 
 #      - name: "Tests have failed: display logs"
 #        if: "${{ failure() }}"
