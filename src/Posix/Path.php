@@ -61,8 +61,14 @@ class Path extends AbstractPath
         // TODO: Implement resolves() method.
     }
 
+    /**
+     * Always NoOP for *nix systems.
+     * @param string $path
+     *
+     * @return string
+     */
     public static function toNamespacedPath(string $path): string
     {
-        // TODO: Implement toNamespacedPath() method.
+        return $path;
     }
 }

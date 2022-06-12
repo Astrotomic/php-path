@@ -93,6 +93,6 @@ class Path extends AbstractPath
 
     public static function toNamespacedPath(string $path): string
     {
-        // TODO: Implement toNamespacedPath() method.
+        return static::getPlatformApi()::toNamespacedPath($path);
     }
 }
