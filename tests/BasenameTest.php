@@ -105,7 +105,6 @@ test('Unix backslashes work properly', function (array $input, string $expected)
 test('that POSIX filenames may include control characters', function () {
     // POSIX filenames may include control characters
     // c.f. https://dwheeler.com/essays/fixing-unix-linux-filenames.html
-    // TODO: PORT THIS CODE
     $controlCharacterFilename = 'Icon' . chr(13);
     expect(\Astrotomic\Path\Posix\Path::basename("/a/b/$controlCharacterFilename"))->toBeString()->toBe($controlCharacterFilename);
 });
