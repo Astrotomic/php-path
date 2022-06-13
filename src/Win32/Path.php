@@ -30,7 +30,6 @@ class Path extends AbstractPath
         return 'UNDEFINED';
     }
 
-    // TODO: add test
     public static function format(PathObject $pathObject): string
     {
         // TODO: Implement format() method.
@@ -43,7 +42,6 @@ class Path extends AbstractPath
         return false;
     }
 
-    // TODO: add test
     public static function join(string ...$paths): string
     {
         // TODO: Implement join() method.
@@ -56,7 +54,6 @@ class Path extends AbstractPath
         return 'UNDEFINED';
     }
 
-    // TODO: add test
     public static function parse(string $path): PathObject
     {
         // TODO: Implement parse() method.
