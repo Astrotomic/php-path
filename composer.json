@@ -1,6 +1,6 @@
 {
     "name": "astrotomic/path",
-    "description": "An enhanced node.js path module port for PHP.",
+    "description": "An enhanced Node.js path module port for PHP.",
     "license": "MIT",
     "type": "library",
     "keywords": [
