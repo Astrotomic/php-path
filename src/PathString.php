@@ -14,16 +14,33 @@ class PathString
         private null|string $extension = null,
     ) {}
 
-    public static function make(string $path): PathString
+    public static function fromString(string $path): PathString
     {
         $info = pathinfo($path);
         $root = Path::isWindows() ? substr($info['dirname'], 0, 2) : '/';
-        return new static(
+        return static::make(
             root: $root,
             directory: $info['dirname'],
             base: $info['basename'],
             name: $info['filename'],
             extension: $info['extension'],
+        );
+    }
+
+    public static function make(
+        null|string $root = null,
+        null|string $directory = null,
+        null|string $base = null,
+        null|string $name = null,
+        null|string $extension = null,
+        null|PathString $from = null,
+    ) {
+        return new static(
+            root: $from->root ?? $root,
+            directory: $from->directory ?? $directory,
+            base: $from->base ?? $base,
+            name: $from->name ?? $name,
+            extension: $from->extension ?? $extension,
         );
     }
     
