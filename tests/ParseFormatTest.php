@@ -7,18 +7,24 @@ use Astrotomic\Path\Win32\Path as WinPath;
 test('can properly parse and then format paths with *nix', function(string $element, string $expectedRoot) {
     $output = PosixPath::parse($element);
     // Verify types of path object components.
-    expect($output->root)->toBeString();
-    expect($output->dir)->toBeString();
-    expect($output->base)->toBeString();
-    expect($output->ext)->toBeString();
-    expect($output->name)->toBeString();
-    // Verify the object can be rendered back to the same string.
-    expect(Astrotomic\Path\Posix\Path::format($output))->toBeString()->toBe($element);
-    // Verify the PathObjects root value - after type and format, same as port lib.
-    expect($output->root)->toBe($expectedRoot);
-    expect($output->dir)->toBe($output->dir ? PosixPath::dirname($element) : '');
-    expect($output->base)->toBe(PosixPath::basename($element));
-    expect($output->ext)->toBe(PosixPath::extname($element));
+    expect($output->root)
+        ->toBeString()
+        ->toBe($expectedRoot)
+        ->and($output->dir)
+        ->toBeString()
+        ->toBe($output->dir ? PosixPath::dirname($element) : '')
+        ->and($output->base)
+        ->toBeString()
+        ->toBe(PosixPath::basename($element))
+        ->and($output->ext)
+        ->toBeString()
+        ->toBe(PosixPath::extname($element))
+        ->and($output->name)
+        ->toBeString()
+        // Verify the object can be rendered back to the same string.
+        ->and(PosixPath::format($output))
+        ->toBeString()
+        ->toBe($element);
 })->with([
     // [path, root]
     ['/home/user/dir/file.txt', '/'],
@@ -46,18 +52,25 @@ test('can properly parse and then format paths with *nix', function(string $elem
 test('can properly parse and then format paths with Win32', function(string $element, string $expectedRoot) {
     $output = WinPath::parse($element);
     // Verify types of path object components.
-    expect($output->root)->toBeString();
-    expect($output->dir)->toBeString();
-    expect($output->base)->toBeString();
-    expect($output->ext)->toBeString();
-    expect($output->name)->toBeString();
-    // Verify the object can be rendered back to the same string.
-    expect(Astrotomic\Path\Win32\Path::format($output))->toBeString()->toBe($element);
-    // Verify the PathObjects root value - after type and format, same as port lib.
-    expect($output->root)->toBe($expectedRoot);
-    expect($output->dir)->toBe($output->dir ? WinPath::dirname($element) : '');
-    expect($output->base)->toBe(WinPath::basename($element));
-    expect($output->ext)->toBe(WinPath::extname($element));
+    expect($output->root)
+        ->toBeString()
+        ->toBe($expectedRoot)
+        ->and($output->dir)
+        ->toBeString()
+        ->toBe($output->dir ? WinPath::dirname($element) : '')
+        ->and($output->base)
+        ->toBeString()
+        ->toBe(WinPath::basename($element))
+        ->and($output->ext)
+        ->toBeString()
+        ->toBe(WinPath::extname($element))
+        ->and($output->name)
+        ->toBeString()
+        // Verify the object can be rendered back to the same string.
+        ->and(WinPath::format($output))
+        ->toBeString()
+        ->toBe($element);
+
 })->with([
     // [path, root]
     ['C:\\path\\dir\\index.html', 'C:\\'],
@@ -85,14 +98,17 @@ test('can properly parse and then format paths with Win32', function(string $ele
 ]);
 
 test('ensure special win32 paths parse', function(string $element, PathObject $expected) {
-    expect(WinPath::parse($element))->toBeObject()->toBe($expected);
+    expect(WinPath::parse($element))
+        ->toBeObject()
+        ->toBe($expected);
 })->with([
-    ['t', new PathObject(base: 't', name: 't', root: '', dir: '', ext: '')],
-    ['/foo/bar', new PathObject(root: '/', dir: '/foo', base: 'bar', ext: '', name: 'bar')],
+    ['t', new PathObject(base: 't', name: 't')],
+    ['/foo/bar', new PathObject(dir: '/foo', root: '/', base: 'bar', name: 'bar')],
 ]);
 
 test('ensure special win32 paths format', function(PathObject $element, string $expected) {
-    expect(WinPath::format($element))->toBe($expected);
+    expect(WinPath::format($element))
+        ->toBe($expected);
 })->with([
     [new PathObject(dir: 'some\\dir'), 'some\\dir\\'],
     [new PathObject(base: 'index.html'), 'index.html'],
@@ -104,7 +120,8 @@ test('ensure special win32 paths format', function(PathObject $element, string $
 ]);
 
 test('ensure special *nix paths format', function(PathObject $element, string $expected) {
-    expect(PosixPath::format($element))->toBe($expected);
+    expect(PosixPath::format($element))
+        ->toBe($expected);
 })->with([
     [new PathObject(dir: 'some/dir'), 'some/dir/'],
     [new PathObject(base: 'index.html'), 'index.html'],

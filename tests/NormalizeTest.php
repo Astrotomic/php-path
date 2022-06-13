@@ -1,7 +1,12 @@
 <?php
 
+use Astrotomic\Path\Posix\Path as PosixPath;
+use Astrotomic\Path\Win32\Path as WinPath;
+
 test('verify basic Win32 normalize', function (string $input, string $expected) {
-    expect(\Astrotomic\Path\Win32\Path::normalize($input))->toBeString()->toBe($expected);
+    expect(WinPath::normalize($input))
+        ->toBeString()
+        ->toBe($expected);
 })->with([
     ['./fixtures///b/../b/c.js', 'fixtures\\b\\c.js',],
     ['/foo/../../../bar', '\\bar',],
@@ -30,7 +35,9 @@ test('verify basic Win32 normalize', function (string $input, string $expected) 
 ]);
 
 test('verify basic *nix normalize', function (string $input, string $expected) {
-    expect(\Astrotomic\Path\Posix\Path::normalize($input))->toBeString()->toBe($expected);
+    expect(PosixPath::normalize($input))
+        ->toBeString()
+        ->toBe($expected);
 })->with([
     ['./fixtures///b/../b/c.js', 'fixtures/b/c.js',],
     ['/foo/../../../bar', '/bar',],

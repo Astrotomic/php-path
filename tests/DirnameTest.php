@@ -1,10 +1,13 @@
 <?php
 
+use Astrotomic\Path\Posix\Path as PosixPath;
+use Astrotomic\Path\Win32\Path as WinPath;
+
 /**
  * @covers \Astrotomic\Path\Posix\Path::dirname()
  */
 test('basic *nix dirname tests', function (string $input, string $expected) {
-    expect(\Astrotomic\Path\Posix\Path::dirname($input))->toBeString()->toBe($expected);
+    expect(PosixPath::dirname($input))->toBeString()->toBe($expected);
 })->with([
     ['/a/b/', '/a',],
     ['/a/b', '/a',],
@@ -21,7 +24,7 @@ test('basic *nix dirname tests', function (string $input, string $expected) {
  * @covers \Astrotomic\Path\Win32\Path::dirname()
  */
 test('basic Win32 dirname tests', function (string $input, string $expected) {
-    expect(\Astrotomic\Path\Win32\Path::dirname($input))->toBeString()->toBe($expected);
+    expect(WinPath::dirname($input))->toBeString()->toBe($expected);
 })->with([
     ['c:\\', 'c:\\',],
     ['c:\\foo', 'c:\\',],

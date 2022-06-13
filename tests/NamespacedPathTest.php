@@ -1,10 +1,14 @@
 <?php
 
+
+use Astrotomic\Path\Path;
+use Astrotomic\Path\Posix\Path as PosixPath;
+
 /**
  * @covers \Astrotomic\Path\Path::toNamespacedPath()
  */
 test('verify NOOP for toNamespacedPath on any platform', function(string $input, string $expected) {
-    expect(\Astrotomic\Path\Path::toNamespacedPath($input))->toBe($expected);
+    expect(Path::toNamespacedPath($input))->toBe($expected);
 })->with([
     ['', ''],
     ['null', 'null'],
@@ -16,7 +20,7 @@ test('verify NOOP for toNamespacedPath on any platform', function(string $input,
  * @covers \Astrotomic\Path\Posix\Path::toNamespacedPath()
  */
 test('verify *nix runs NOOP for toNamespacedPath', function(string $input, string $expected) {
-    expect(\Astrotomic\Path\Posix\Path::toNamespacedPath($input))->toBe($expected);
+    expect(PosixPath::toNamespacedPath($input))->toBe($expected);
 })->with([
     ['/foo/bar', '/foo/bar'],
     ['foo/bar', 'foo/bar'],
@@ -24,3 +28,5 @@ test('verify *nix runs NOOP for toNamespacedPath', function(string $input, strin
     ['true', 'true'],
     ['1', '1'],
 ]);
+
+// TODO: add more tests to cover windows usage

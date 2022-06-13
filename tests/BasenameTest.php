@@ -1,6 +1,7 @@
 <?php
 
 use \Astrotomic\Path\Path;
+use Astrotomic\Path\Posix\Path as PosixPath;
 
 /**
  * Test global basename method.
@@ -14,7 +15,9 @@ test('that the global basename method works', function (array $input, string $ex
         $path = $input[0];
         $ext = null;
     }
-    expect(Path::basename($path, $ext))->toBeString()->toBe($expected);
+    expect(Path::basename($path, $ext))
+        ->toBeString()
+        ->toBe($expected);
 })->with([
     [['.php', '.php',], ''],
     [['', ], ''],
@@ -55,7 +58,9 @@ test('the windows basename method', function (array $input, string $expected) {
         $path = $input[0];
         $ext = null;
     }
-    expect(Path::win32()::basename($path, $ext))->toBeString()->toBe($expected);
+    expect(Path::win32()::basename($path, $ext))
+        ->toBeString()
+        ->toBe($expected);
 })->with([
     [['\\dir\\basename.ext', ], 'basename.ext'],
     [['\\basename.ext', ], 'basename.ext'],
@@ -89,7 +94,9 @@ test('the windows basename method', function (array $input, string $expected) {
  */
 test('Unix backslashes work properly', function (array $input, string $expected) {
     [$path, $ext] = $input;
-    expect(Path::posix()::basename($path, $ext))->toBeString()->toBe($expected);
+    expect(Path::posix()::basename($path, $ext))
+        ->toBeString()
+        ->toBe($expected);
 })->with([
     [['\\dir\\basename.ext', ], '\\dir\\basename.ext'],
     [['\\basename.ext', ], '\\basename.ext'],
@@ -106,5 +113,7 @@ test('that POSIX filenames may include control characters', function () {
     // POSIX filenames may include control characters
     // c.f. https://dwheeler.com/essays/fixing-unix-linux-filenames.html
     $controlCharacterFilename = 'Icon' . chr(13);
-    expect(\Astrotomic\Path\Posix\Path::basename("/a/b/$controlCharacterFilename"))->toBeString()->toBe($controlCharacterFilename);
+    expect(PosixPath::basename("/a/b/$controlCharacterFilename"))
+        ->toBeString()
+        ->toBe($controlCharacterFilename);
 });
