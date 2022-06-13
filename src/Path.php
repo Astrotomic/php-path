@@ -54,7 +54,7 @@ class Path extends AbstractPath
         return static::getPlatformApi()::extname($path);
     }
 
-    public static function format(PathObject $pathObject): string
+    public static function format(PathString $pathObject): string
     {
         return static::getPlatformApi()::format($pathObject);
     }
@@ -74,7 +74,7 @@ class Path extends AbstractPath
         return static::getPlatformApi()::normalize($path);
     }
 
-    public static function parse(string $path): PathObject
+    public static function parse(string $path): PathString
     {
         return static::getPlatformApi()::parse($path);
     }

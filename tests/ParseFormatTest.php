@@ -1,6 +1,6 @@
 <?php
 
-use Astrotomic\Path\PathObject;
+use Astrotomic\Path\PathString;
 use Astrotomic\Path\Posix\Path as PosixPath;
 use Astrotomic\Path\Win32\Path as WinPath;
 
@@ -97,37 +97,37 @@ test('can properly parse and then format paths with Win32', function(string $ele
     ['\\\\?\\UNC\\server\\share', '\\\\?\\UNC\\'],
 ]);
 
-test('ensure special win32 paths parse', function(string $element, PathObject $expected) {
+test('ensure special win32 paths parse', function(string $element, PathString $expected) {
     expect(WinPath::parse($element))
         ->toBeObject()
         ->toBe($expected);
 })->with([
-    ['t', new PathObject(base: 't', name: 't')],
-    ['/foo/bar', new PathObject(dir: '/foo', root: '/', base: 'bar', name: 'bar')],
+    ['t', new PathString(base: 't', name: 't')],
+    ['/foo/bar', new PathString(directory: '/foo', root: '/', base: 'bar', name: 'bar')],
 ]);
 
-test('ensure special win32 paths format', function(PathObject $element, string $expected) {
+test('ensure special win32 paths format', function(PathString $element, string $expected) {
     expect(WinPath::format($element))
         ->toBe($expected);
 })->with([
-    [new PathObject(dir: 'some\\dir'), 'some\\dir\\'],
-    [new PathObject(base: 'index.html'), 'index.html'],
-    [new PathObject(root: 'C:\\'), 'C:\\'],
-    [new PathObject(name: 'index', ext: '.html'), 'index.html'],
-    [new PathObject(dir: 'some\\dir', name: 'index', ext: '.html'), 'some\\dir\\index.html'],
-    [new PathObject(root: 'C:\\', name: 'index', ext: '.html'), 'C:\\index.html'],
-    [new PathObject(), ''],
+    [new PathString(directory: 'some\\dir'), 'some\\dir\\'],
+    [new PathString(base: 'index.html'), 'index.html'],
+    [new PathString(root: 'C:\\'), 'C:\\'],
+    [new PathString(name: 'index', extension: '.html'), 'index.html'],
+    [new PathString(directory: 'some\\dir', name: 'index', extension: '.html'), 'some\\dir\\index.html'],
+    [new PathString(root: 'C:\\', name: 'index', extension: '.html'), 'C:\\index.html'],
+    [new PathString(), ''],
 ]);
 
-test('ensure special *nix paths format', function(PathObject $element, string $expected) {
+test('ensure special *nix paths format', function(PathString $element, string $expected) {
     expect(PosixPath::format($element))
         ->toBe($expected);
 })->with([
-    [new PathObject(dir: 'some/dir'), 'some/dir/'],
-    [new PathObject(base: 'index.html'), 'index.html'],
-    [new PathObject(root: '/'), '/'],
-    [new PathObject(name: 'index', ext: '.html'), 'index.html'],
-    [new PathObject(dir: 'some/dir', name: 'index', ext: '.html'), 'some/dir/index.html'],
-    [new PathObject(root: '/', name: 'index', ext: '.html'), '/index.html'],
-    [new PathObject(), ''],
+    [new PathString(directory: 'some/dir'), 'some/dir/'],
+    [new PathString(base: 'index.html'), 'index.html'],
+    [new PathString(root: '/'), '/'],
+    [new PathString(name: 'index', extension: '.html'), 'index.html'],
+    [new PathString(directory: 'some/dir', name: 'index', extension: '.html'), 'some/dir/index.html'],
+    [new PathString(root: '/', name: 'index', extension: '.html'), '/index.html'],
+    [new PathString(), ''],
 ]);

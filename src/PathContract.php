@@ -37,11 +37,11 @@ interface PathContract
     /**
      * Returns a path string from a path object.
      *
-     * @param PathObject $pathObject - This might end up just being a placeholder for something better.
+     * @param PathString $pathObject - This might end up just being a placeholder for something better.
      *
      * @return string
      */
-    public static function format(PathObject $pathObject): string;
+    public static function format(PathString $pathObject): string;
 
     /**
      * Determines if the `path` is an absolute path.
@@ -79,9 +79,9 @@ interface PathContract
      *
      * @param string $path
      *
-     * @return PathObject
+     * @return PathString
      */
-    public static function parse(string $path): PathObject;
+    public static function parse(string $path): PathString;
 
     /**
      * Returns the relative path between the `from` and the `to` based on the CWD.

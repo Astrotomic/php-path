@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Astrotomic\Path\Win32;
 
 use Astrotomic\Path\AbstractPath;
-use Astrotomic\Path\PathObject;
+use Astrotomic\Path\PathString;
 
 class Path extends AbstractPath
 {
@@ -30,7 +30,7 @@ class Path extends AbstractPath
         return 'UNDEFINED';
     }
 
-    public static function format(PathObject $pathObject): string
+    public static function format(PathString $pathObject): string
     {
         // TODO: Implement format() method.
         return 'UNDEFINED';
@@ -54,10 +54,10 @@ class Path extends AbstractPath
         return 'UNDEFINED';
     }
 
-    public static function parse(string $path): PathObject
+    public static function parse(string $path): PathString
     {
         // TODO: Implement parse() method.
-        return new PathObject();
+        return new PathString();
     }
 
     public static function relative(string $from, string $to): string
