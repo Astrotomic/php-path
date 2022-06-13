@@ -1,7 +1,15 @@
 <?php
 
+use Astrotomic\Path\Posix\Path as PosixPath;
+use Astrotomic\Path\Win32\Path as WinPath;
+
+/**
+ * @covers \Astrotomic\Path\Win32\Path::isAbsolute()
+ */
 test('that win32 isAbsolute provides expected results', function (string $input, bool $expected) {
-    expect(\Astrotomic\Path\Win32\Path::isAbsolute($input))->toBeBool()->toBe($expected);
+    expect(WinPath::isAbsolute($input))
+        ->toBeBool()
+        ->toBe($expected);
 })->with([
     ['/', true],
     ['//', true],
@@ -23,8 +31,13 @@ test('that win32 isAbsolute provides expected results', function (string $input,
     ['directory\\directory', false],
 ]);
 
+/**
+ * @covers \Astrotomic\Path\Posix\Path::isAbsolute()
+ */
 test('that *nix isAbsolute provides expected results', function (string $input, bool $expected) {
-    expect(\Astrotomic\Path\Posix\Path::isAbsolute($input))->toBeBool()->toBe($expected);
+    expect(PosixPath::isAbsolute($input))
+        ->toBeBool()
+        ->toBe($expected);
 })->with([
     ['/home/foo', true],
     ['/home/foo/..', true],

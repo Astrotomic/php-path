@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Astrotomic\Path;
 
 use Astrotomic\Path\Posix\Path as PosixPath;
@@ -9,11 +11,7 @@ class Path extends AbstractPath
 {
     public static function isWindows(): bool
     {
-        if (PHP_OS_FAMILY === 'Windows') {
-            return true;
-        }
-
-        return false;
+        return (PHP_OS_FAMILY === 'Windows');
     }
 
     public static function posix(): PosixPath|PathContract
@@ -43,52 +41,52 @@ class Path extends AbstractPath
 
     public static function basename(string $path, ?string $ext = null): string
     {
-        // TODO: Implement basename() method.
+        return static::getPlatformApi()::basename($path, $ext);
     }
 
     public static function dirname(string $path): string
     {
-        // TODO: Implement dirname() method.
+        return static::getPlatformApi()::dirname($path);
     }
 
     public static function extname(string $path): string
     {
-        // TODO: Implement extname() method.
+        return static::getPlatformApi()::extname($path);
     }
 
     public static function format(PathObject $pathObject): string
     {
-        // TODO: Implement format() method.
+        return static::getPlatformApi()::format($pathObject);
     }
 
     public static function isAbsolute(string $path): bool
     {
-        // TODO: Implement isAbsolute() method.
+        return static::getPlatformApi()::isAbsolute($path);
     }
 
     public static function join(string ...$paths): string
     {
-        // TODO: Implement join() method.
+        return static::getPlatformApi()::join(...$paths);
     }
 
     public static function normalize(string $path): string
     {
-        // TODO: Implement normalize() method.
+        return static::getPlatformApi()::normalize($path);
     }
 
     public static function parse(string $path): PathObject
     {
-        // TODO: Implement parse() method.
+        return static::getPlatformApi()::parse($path);
     }
 
     public static function relative(string $from, string $to): string
     {
-        // TODO: Implement relative() method.
+        return static::getPlatformApi()::relative($from, $to);
     }
 
     public static function resolves(string ...$paths): string
     {
-        // TODO: Implement resolves() method.
+        return static::getPlatformApi()::resolves(...$paths);
     }
 
     public static function toNamespacedPath(string $path): string

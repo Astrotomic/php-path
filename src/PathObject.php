@@ -1,12 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Astrotomic\Path;
 
 class PathObject
 {
-    public string $dir;
-    public string $root;
-    public string $base;
-    public string $name;
-    public string $ext;
+    public function __construct(
+        public null|string $dir = null,
+        public null|string $root = null,
+        public null|string $base = null,
+        public null|string $name = null,
+        public null|string $ext = null,
+    ) {}
 }

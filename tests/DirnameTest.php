@@ -1,7 +1,13 @@
 <?php
 
-test('basic *nix dirname tests', function () {
+use Astrotomic\Path\Posix\Path as PosixPath;
+use Astrotomic\Path\Win32\Path as WinPath;
 
+/**
+ * @covers \Astrotomic\Path\Posix\Path::dirname()
+ */
+test('basic *nix dirname tests', function (string $input, string $expected) {
+    expect(PosixPath::dirname($input))->toBeString()->toBe($expected);
 })->with([
     ['/a/b/', '/a',],
     ['/a/b', '/a',],
@@ -13,9 +19,13 @@ test('basic *nix dirname tests', function () {
     ['foo', '.',],
 ]);
 
-// On Windows a backslash acts as a path separator.
-// Test against windows methods...
-dataset('dirnamesWindowsBasics', [
+/**
+ * On Windows a backslash acts as a path separator.
+ * @covers \Astrotomic\Path\Win32\Path::dirname()
+ */
+test('basic Win32 dirname tests', function (string $input, string $expected) {
+    expect(WinPath::dirname($input))->toBeString()->toBe($expected);
+})->with([
     ['c:\\', 'c:\\',],
     ['c:\\foo', 'c:\\',],
     ['c:\\foo\\', 'c:\\',],
