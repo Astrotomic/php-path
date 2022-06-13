@@ -1,9 +1,12 @@
 <?php
 
+use Astrotomic\Path\PathObject;
+use Astrotomic\Path\Posix\Path as PosixPath;
+use Astrotomic\Path\Win32\Path as WinPath;
+
 test('can properly parse and then format paths with *nix', function(string $element, string $expectedRoot) {
-    $output = \Astrotomic\Path\Posix\Path::parse($element);
+    $output = PosixPath::parse($element);
     // Verify types of path object components.
-    // TODO: fix the PathObject::class so that these can be nullable for delineating unset vs empty ''.
     expect($output->root)->toBeString();
     expect($output->dir)->toBeString();
     expect($output->base)->toBeString();
@@ -13,9 +16,9 @@ test('can properly parse and then format paths with *nix', function(string $elem
     expect(Astrotomic\Path\Posix\Path::format($output))->toBeString()->toBe($element);
     // Verify the PathObjects root value - after type and format, same as port lib.
     expect($output->root)->toBe($expectedRoot);
-    expect($output->dir)->toBe($output->dir ? \Astrotomic\Path\Posix\Path::dirname($element) : '');
-    expect($output->base)->toBe(\Astrotomic\Path\Posix\Path::basename($element));
-    expect($output->ext)->toBe(\Astrotomic\Path\Posix\Path::extname($element));
+    expect($output->dir)->toBe($output->dir ? PosixPath::dirname($element) : '');
+    expect($output->base)->toBe(PosixPath::basename($element));
+    expect($output->ext)->toBe(PosixPath::extname($element));
 })->with([
     // [path, root]
     ['/home/user/dir/file.txt', '/'],
@@ -41,9 +44,8 @@ test('can properly parse and then format paths with *nix', function(string $elem
 ]);
 
 test('can properly parse and then format paths with Win32', function(string $element, string $expectedRoot) {
-    $output = \Astrotomic\Path\Win32\Path::parse($element);
+    $output = WinPath::parse($element);
     // Verify types of path object components.
-    // TODO: fix the PathObject::class so that these can be nullable for delineating unset vs empty ''.
     expect($output->root)->toBeString();
     expect($output->dir)->toBeString();
     expect($output->base)->toBeString();
@@ -53,9 +55,9 @@ test('can properly parse and then format paths with Win32', function(string $ele
     expect(Astrotomic\Path\Win32\Path::format($output))->toBeString()->toBe($element);
     // Verify the PathObjects root value - after type and format, same as port lib.
     expect($output->root)->toBe($expectedRoot);
-    expect($output->dir)->toBe($output->dir ? \Astrotomic\Path\Win32\Path::dirname($element) : '');
-    expect($output->base)->toBe(\Astrotomic\Path\Win32\Path::basename($element));
-    expect($output->ext)->toBe(\Astrotomic\Path\Win32\Path::extname($element));
+    expect($output->dir)->toBe($output->dir ? WinPath::dirname($element) : '');
+    expect($output->base)->toBe(WinPath::basename($element));
+    expect($output->ext)->toBe(WinPath::extname($element));
 })->with([
     // [path, root]
     ['C:\\path\\dir\\index.html', 'C:\\'],
@@ -82,33 +84,33 @@ test('can properly parse and then format paths with Win32', function(string $ele
     ['\\\\?\\UNC\\server\\share', '\\\\?\\UNC\\'],
 ]);
 
-test('ensure special win32 paths parse', function(string $element, \Astrotomic\Path\PathObject $expected) {
-    expect(\Astrotomic\Path\Win32\Path::parse($element))->toBeObject()->toBe($element);
+test('ensure special win32 paths parse', function(string $element, PathObject $expected) {
+    expect(WinPath::parse($element))->toBeObject()->toBe($expected);
 })->with([
-    ['t', new \Astrotomic\Path\PathObject(base: 't', name: 't', root: '', dir: '', ext: '')],
-    ['/foo/bar', new \Astrotomic\Path\PathObject(root: '/', dir: '/foo', base: 'bar', ext: '', name: 'bar')],
+    ['t', new PathObject(base: 't', name: 't', root: '', dir: '', ext: '')],
+    ['/foo/bar', new PathObject(root: '/', dir: '/foo', base: 'bar', ext: '', name: 'bar')],
 ]);
 
-test('ensure special win32 paths format', function(\Astrotomic\Path\PathObject $element, string $expected) {
-    expect(\Astrotomic\Path\Win32\Path::format($element))->toBe($element);
+test('ensure special win32 paths format', function(PathObject $element, string $expected) {
+    expect(WinPath::format($element))->toBe($expected);
 })->with([
-    [new \Astrotomic\Path\PathObject(dir: 'some\\dir'), 'some\\dir\\'],
-    [new \Astrotomic\Path\PathObject(base: 'index.html'), 'index.html'],
-    [new \Astrotomic\Path\PathObject(root: 'C:\\'), 'C:\\'],
-    [new \Astrotomic\Path\PathObject(name: 'index', ext: '.html'), 'index.html'],
-    [new \Astrotomic\Path\PathObject(dir: 'some\\dir', name: 'index', ext: '.html'), 'some\\dir\\index.html'],
-    [new \Astrotomic\Path\PathObject(root: 'C:\\', name: 'index', ext: '.html'), 'C:\\index.html'],
-    [new \Astrotomic\Path\PathObject(), ''],
+    [new PathObject(dir: 'some\\dir'), 'some\\dir\\'],
+    [new PathObject(base: 'index.html'), 'index.html'],
+    [new PathObject(root: 'C:\\'), 'C:\\'],
+    [new PathObject(name: 'index', ext: '.html'), 'index.html'],
+    [new PathObject(dir: 'some\\dir', name: 'index', ext: '.html'), 'some\\dir\\index.html'],
+    [new PathObject(root: 'C:\\', name: 'index', ext: '.html'), 'C:\\index.html'],
+    [new PathObject(), ''],
 ]);
 
-test('ensure special *nix paths format', function(\Astrotomic\Path\PathObject $element, string $expected) {
-    expect(\Astrotomic\Path\Posix\Path::format($element))->toBe($element);
+test('ensure special *nix paths format', function(PathObject $element, string $expected) {
+    expect(PosixPath::format($element))->toBe($expected);
 })->with([
-    [new \Astrotomic\Path\PathObject(dir: 'some/dir'), 'some/dir/'],
-    [new \Astrotomic\Path\Path(base: 'index.html'), 'index.html'],
-    [new \Astrotomic\Path\PathObject(root: '/'), '/'],
-    [new \Astrotomic\Path\PathObject(name: 'index', ext: '.html'), 'index.html'],
-    [new \Astrotomic\Path\PathObject(dir: 'some/dir', name: 'index', ext: '.html'), 'some/dir/index.html'],
-    [new \Astrotomic\Path\PathObject(root: '/', name: 'index', ext: '.html'), '/index.html'],
-    [new \Astrotomic\Path\PathObject(), ''],
+    [new PathObject(dir: 'some/dir'), 'some/dir/'],
+    [new PathObject(base: 'index.html'), 'index.html'],
+    [new PathObject(root: '/'), '/'],
+    [new PathObject(name: 'index', ext: '.html'), 'index.html'],
+    [new PathObject(dir: 'some/dir', name: 'index', ext: '.html'), 'some/dir/index.html'],
+    [new PathObject(root: '/', name: 'index', ext: '.html'), '/index.html'],
+    [new PathObject(), ''],
 ]);
