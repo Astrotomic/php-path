@@ -11,11 +11,7 @@ class Path extends AbstractPath
 {
     public static function isWindows(): bool
     {
-        if (PHP_OS_FAMILY === 'Windows') {
-            return true;
-        }
-
-        return false;
+        return (PHP_OS_FAMILY === 'Windows');
     }
 
     public static function posix(): PosixPath|PathContract
