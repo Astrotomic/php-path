@@ -17,7 +17,10 @@ class PathString
     public static function fromString(string $path): PathString
     {
         $info = pathinfo($path);
-        $root = Path::isWindows() ? substr($info['dirname'], 0, 2) : '/';
+        $root = null;
+        if (!str_starts_with($info['dirname'], '.')) {
+            $root = Path::isWindows() ? substr($info['dirname'], 0, 2) : '/';
+        }
         return static::make(
             root: $root,
             directory: $info['dirname'],
