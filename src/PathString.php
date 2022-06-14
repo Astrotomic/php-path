@@ -6,29 +6,73 @@ namespace Astrotomic\Path;
 
 class PathString implements \Stringable
 {
+    /**
+     * @param null|string   $root
+     * @param null|string[] $directory
+     * @param null|string   $basename
+     * @param null|string   $filename
+     * @param null|string   $extension
+     */
     private function __construct(
         private null|string $root = null,
-        private null|string $directory = null,
-        private null|string $base = null,
-        private null|string $name = null,
+        private null|array  $directory = null,
+        private null|string $basename = null,
+        private null|string $filename = null,
         private null|string $extension = null,
+        private null|string $separator = null,
     ) {}
+
+    public static function fromString(
+        string $path,
+        null|string $separator = DIRECTORY_SEPARATOR,
+    ): static {
+        $info = pathinfo($path);
+        if ($separator === "\\") {
+            $info = pathinfo(str_replace("\\", "/", $path));
+            $info['dirname'] = str_replace("/", "\\", $info['dirname']);
+        }
+        $root = !str_starts_with($path, '.') ? ($separator === '/') ? '/' : substr($path, 0, 2) : null;
+        $extension = (str_ends_with($path, $separator) || str_starts_with($info['basename'], '.')) ? null : $info['extension'] ?? null;
+        $directory = null;
+        if ($info['dirname'] !== '') {
+            $directory = explode($separator, $info['dirname']);
+            $directory = array_filter($directory, function ($value) {
+                return $value !== '';
+            });
+        }
+        return new static(
+            root: $root,
+            directory: $directory,
+            basename: $info['basename'] ?: null,
+            filename: $info['filename'] ?: null,
+            extension: $extension ?: null,
+            separator: $separator ?: null,
+        );
+    }
 
     public static function make(
         null|string $root = null,
         null|string $directory = null,
-        null|string $base = null,
-        null|string $name = null,
+        null|string $basename = null,
+        null|string $filename = null,
         null|string $extension = null,
+        null|string $separator = null,
         null|PathString $from = null,
     ): static {
-        return new static(
-            root: $from->root ?? $root ?: null,
-            directory: $from->directory ?? $directory ?: null,
-            base: $from->base ?? $base ?: null,
-            name: $from->name ?? $name ?: null,
-            extension: $from->extension ?? $extension ?: null,
+        if ($separator === null && $from === null) {
+            throw new \InvalidArgumentException('Either a `separator` or a `from` must be provided.');
+        }
+        $separator = $from->separator ?? $separator;
+        $directory = $directory !== null ? explode($separator, $directory) : $from->directory ?? null;
+        $temp = new static(
+            root: $root ?? $from->root ?: null,
+            directory: $directory,
+            basename: $basename ?? $from->basename ?: null,
+            filename: $filename ?? $from->filename ?: null,
+            extension: $extension ?? $from->extension ?: null,
+            separator: $separator,
         );
+        return static::fromString((string) $temp, $separator);
     }
 
     public function isAbsolute(): bool
@@ -43,17 +87,22 @@ class PathString implements \Stringable
 
     public function getDirectory(): ?string
     {
+        return $this->directory ? implode($this->separator, $this->directory) : null;
+    }
+
+    public function getDirectoryStack(): ?array
+    {
         return $this->directory;
     }
 
-    public function getBase(): ?string
+    public function getBasename(): ?string
     {
-        return $this->base;
+        return $this->basename;
     }
 
-    public function getName(): ?string
+    public function getFilename(): ?string
     {
-        return $this->name;
+        return $this->filename;
     }
 
     public function getExtension(): ?string
@@ -61,12 +110,17 @@ class PathString implements \Stringable
         return $this->extension;
     }
 
+    public function getSeparator(): ?string
+    {
+        return $this->separator;
+    }
 
     public function __toString(): string
     {
-        return implode(DIRECTORY_SEPARATOR, array_filter([
-            $this->directory,
-            $this->base,
+        $prepend = $this->separator === "/" ? "/" : '';
+        return $prepend . implode($this->separator, array_filter([
+            ...$this->directory,
+            $this->basename,
         ], function ($value) {
             return $value !== null;
         }));

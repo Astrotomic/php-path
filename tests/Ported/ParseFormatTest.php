@@ -102,8 +102,8 @@ test('ensure special win32 paths parse', function(string $element, PathString $e
         ->toBeObject()
         ->toBe($expected);
 })->with([
-    ['t', new PathString(base: 't', name: 't')],
-    ['/foo/bar', new PathString(directory: '/foo', root: '/', base: 'bar', name: 'bar')],
+    ['t', new PathString(basename: 't', filename: 't')],
+    ['/foo/bar', new PathString(directory: '/foo', root: '/', basename: 'bar', filename: 'bar')],
 ]);
 
 test('ensure special win32 paths format', function(PathString $element, string $expected) {
@@ -111,11 +111,11 @@ test('ensure special win32 paths format', function(PathString $element, string $
         ->toBe($expected);
 })->with([
     [new PathString(directory: 'some\\dir'), 'some\\dir\\'],
-    [new PathString(base: 'index.html'), 'index.html'],
+    [new PathString(basename: 'index.html'), 'index.html'],
     [new PathString(root: 'C:\\'), 'C:\\'],
-    [new PathString(name: 'index', extension: '.html'), 'index.html'],
-    [new PathString(directory: 'some\\dir', name: 'index', extension: '.html'), 'some\\dir\\index.html'],
-    [new PathString(root: 'C:\\', name: 'index', extension: '.html'), 'C:\\index.html'],
+    [new PathString(filename: 'index', extension: '.html'), 'index.html'],
+    [new PathString(directory: 'some\\dir', filename: 'index', extension: '.html'), 'some\\dir\\index.html'],
+    [new PathString(root: 'C:\\', filename: 'index', extension: '.html'), 'C:\\index.html'],
     [new PathString(), ''],
 ]);
 
@@ -124,10 +124,10 @@ test('ensure special *nix paths format', function(PathString $element, string $e
         ->toBe($expected);
 })->with([
     [new PathString(directory: 'some/dir'), 'some/dir/'],
-    [new PathString(base: 'index.html'), 'index.html'],
+    [new PathString(basename: 'index.html'), 'index.html'],
     [new PathString(root: '/'), '/'],
-    [new PathString(name: 'index', extension: '.html'), 'index.html'],
-    [new PathString(directory: 'some/dir', name: 'index', extension: '.html'), 'some/dir/index.html'],
-    [new PathString(root: '/', name: 'index', extension: '.html'), '/index.html'],
+    [new PathString(filename: 'index', extension: '.html'), 'index.html'],
+    [new PathString(directory: 'some/dir', filename: 'index', extension: '.html'), 'some/dir/index.html'],
+    [new PathString(root: '/', filename: 'index', extension: '.html'), '/index.html'],
     [new PathString(), ''],
 ]);
