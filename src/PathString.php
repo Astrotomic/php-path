@@ -26,13 +26,21 @@ class PathString implements \Stringable
         string $path,
         null|string $separator = DIRECTORY_SEPARATOR,
     ): static {
-        $info = pathinfo($path);
+        $root = null; // Default to null for relative paths
+        if (!str_starts_with($path, '.')) {
+            // On *nix root is always `/`, on windows we fetch drive letter and :
+            $root = ($separator === '/') ? '/' : substr($path, 0, 2) . '\\';
+        }
+        // Special parsing case for Windows.
         if ($separator === "\\") {
             $info = pathinfo(str_replace("\\", "/", $path));
-            $info['dirname'] = str_replace("/", "\\", $info['dirname']);
+            $info['dirname'] = str_replace("/", "\\", substr($info['dirname'], 2));
+        } else {
+            $info = pathinfo($path);
         }
-        $root = !str_starts_with($path, '.') ? ($separator === '/') ? '/' : substr($path, 0, 2) : null;
+        // Remove parsed extension if the input $path ends with a seperator (is folder), or starts with a dot (is dot file/folder).
         $extension = (str_ends_with($path, $separator) || str_starts_with($info['basename'], '.')) ? null : $info['extension'] ?? null;
+        // Prepare the directory as an array for internal storage
         $directory = null;
         if ($info['dirname'] !== '') {
             $directory = explode($separator, $info['dirname']);
@@ -117,7 +125,7 @@ class PathString implements \Stringable
 
     public function __toString(): string
     {
-        $prepend = $this->separator === "/" ? "/" : '';
+        $prepend = $this->root ?: '';
         return $prepend . implode($this->separator, array_filter([
             ...$this->directory,
             $this->basename,
