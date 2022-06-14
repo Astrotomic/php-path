@@ -1,0 +1,49 @@
+{
+    "name": "astrotomic/path",
+    "description": "An enhanced Node.js path module port for PHP.",
+    "license": "MIT",
+    "type": "library",
+    "keywords": [
+        "path",
+        "nodejs"
+    ],
+    "authors": [
+        {
+            "name": "Dan Pock",
+            "email": "self@danpock.me",
+            "homepage": "https://danpock.me",
+            "role": "Developer"
+        },
+        {
+            "name": "Tom Witkowski",
+            "email": "gummibeer@astrotomic.info",
+            "homepage": "https://astrotomic.info",
+            "role": "Developer"
+        }
+    ],
+    "require-dev": {
+        "pestphp/pest": "^1.21",
+        "pestphp/pest-plugin-parallel": "1.x-dev"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Astrotomic\\Path\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Astrotomic\\Path\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "scripts": {
+        "coverage": "XDEBUG_MODE=coverage ./vendor/bin/pest --parallel --coverage",
+        "para": "./vendor/bin/pest --parallel",
+        "test": "./vendor/bin/pest"
+    }
+}
