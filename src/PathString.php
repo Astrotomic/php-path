@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Astrotomic\Path;
 
-class PathString
+class PathString implements \Stringable
 {
     private function __construct(
         private null|string $root = null,
@@ -14,22 +14,6 @@ class PathString
         private null|string $extension = null,
     ) {}
 
-    public static function fromString(string $path): PathString
-    {
-        $info = pathinfo($path);
-        $root = null;
-        if (!str_starts_with($info['dirname'], '.')) {
-            $root = Path::isWindows() ? substr($info['dirname'], 0, 2) : '/';
-        }
-        return static::make(
-            root: $root,
-            directory: $info['dirname'],
-            base: $info['basename'],
-            name: $info['filename'],
-            extension: $info['extension'],
-        );
-    }
-
     public static function make(
         null|string $root = null,
         null|string $directory = null,
@@ -37,16 +21,21 @@ class PathString
         null|string $name = null,
         null|string $extension = null,
         null|PathString $from = null,
-    ) {
+    ): static {
         return new static(
-            root: $from->root ?? $root,
-            directory: $from->directory ?? $directory,
-            base: $from->base ?? $base,
-            name: $from->name ?? $name,
-            extension: $from->extension ?? $extension,
+            root: $from->root ?? $root ?: null,
+            directory: $from->directory ?? $directory ?: null,
+            base: $from->base ?? $base ?: null,
+            name: $from->name ?? $name ?: null,
+            extension: $from->extension ?? $extension ?: null,
         );
     }
-    
+
+    public function isAbsolute(): bool
+    {
+        return $this->root !== null;
+    }
+
     public function getRoot(): ?string
     {
         return $this->root;
@@ -70,5 +59,16 @@ class PathString
     public function getExtension(): ?string
     {
         return $this->extension;
+    }
+
+
+    public function __toString(): string
+    {
+        return implode(DIRECTORY_SEPARATOR, array_filter([
+            $this->directory,
+            $this->base,
+        ], function ($value) {
+            return $value !== null;
+        }));
     }
 }

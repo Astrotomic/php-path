@@ -56,8 +56,17 @@ class Path extends AbstractPath
 
     public static function parse(string $path): PathString
     {
-        // TODO: Implement parse() method.
-        return new PathString();
+        // Ensure root is null when relative, or capture the drive letter and : when absolute.
+        $root = str_starts_with($path, '.') ? null : substr($path, 0, 2);
+        $info = pathinfo($path);
+        return PathString::make(
+            root: $root,
+            directory: $info['dirname'],
+            base: $info['basename'],
+            name: $info['filename'],
+            // Next we fix PHP's tendency to interpret dot folders as an extension.
+            extension: (str_ends_with($path, DIRECTORY_SEPARATOR) && str_starts_with($info['basename'], '.')) ? null : $info['extension'],
+        );
     }
 
     public static function relative(string $from, string $to): string
