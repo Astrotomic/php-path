@@ -1,7 +1,12 @@
 <?php
 
+use Astrotomic\Path\Posix\Path as PosixPath;
+use Astrotomic\Path\Win32\Path as WinPath;
+
 test('verify Win32 relative path transform tests', function(string $from, string $to, string $expected) {
-    expect(\Astrotomic\Path\Win32\Path::relative($from, $to))->toBeString()->toBe($expected);
+    expect(WinPath::relative($from, $to))
+        ->toBeString()
+        ->toBe($expected);
 })->with([
     ['c:/blah\\blah', 'd:/games', 'd:\\games'],
     ['c:/aaaa/bbbb', 'c:/aaaa', '..'],
@@ -30,7 +35,9 @@ test('verify Win32 relative path transform tests', function(string $from, string
 ]);
 
 test('verify *nix relative path transform tests', function(string $from, string $to, string $expected) {
-    expect(\Astrotomic\Path\Posix\Path::relative($from, $to))->toBeString()->toBe($expected);
+    expect(PosixPath::relative($from, $to))
+        ->toBeString()
+        ->toBe($expected);
 })->with([
     ['/var/lib', '/var', '..'],
     ['/var/lib', '/bin', '../../bin'],

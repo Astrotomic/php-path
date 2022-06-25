@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Astrotomic\Path\Posix;
 
 use Astrotomic\Path\AbstractPath;
-use Astrotomic\Path\PathObject;
+use Astrotomic\Path\PathString;
 
 class Path extends AbstractPath
 {
@@ -30,7 +30,7 @@ class Path extends AbstractPath
         return 'UNDEFINED';
     }
 
-    public static function format(PathObject $pathObject): string
+    public static function format(PathString $pathObject): string
     {
         // TODO: Implement format() method.
         return 'UNDEFINED';
@@ -54,10 +54,29 @@ class Path extends AbstractPath
         return 'UNDEFINED';
     }
 
-    public static function parse(string $path): PathObject
+    /**
+     * Parse a string into a PathString object.
+     *
+     * Relative paths are detected by checking if the path starts with a dot.
+     * Directory and file paths are detected by checking if the path ends with a slash.
+     *
+     * @param string $path
+     *
+     * @return PathString
+     */
+    public static function parse(string $path): PathString
     {
-        // TODO: Implement parse() method.
-        return new PathObject();
+        // Ensure root is null when relative, or capture the drive letter and : when absolute.
+        $root = str_starts_with($path, '.') ? null : '/';
+        $info = pathinfo($path);
+        return PathString::make(
+            root: $root,
+            directory: $info['dirname'],
+            base: $info['basename'],
+            name: $info['filename'],
+            // Next we fix PHP's tendency to interpret dot folders as an extension.
+            extension: str_starts_with($info['basename'], '.') ? null : $info['extension'],
+        );
     }
 
     public static function relative(string $from, string $to): string
