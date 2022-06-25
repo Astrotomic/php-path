@@ -1,0 +1,13 @@
+name: "EC lint"
+
+on:
+  push: null
+  pull_request: null
+
+jobs:
+  ec-lint:
+    name: "Check adherence to EditorConfig"
+    runs-on: "ubuntu-20.04"
+    steps:
+      - uses: "actions/checkout@v3"
+      - uses: "greut/eclint-action@v0"

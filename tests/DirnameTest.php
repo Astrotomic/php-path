@@ -60,4 +60,3 @@ test('basic Win32 dirname tests', function (string $input, string $expected) {
     ['////', '/',],
     ['foo', '.',],
 ]);
-
